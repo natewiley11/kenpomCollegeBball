@@ -6,6 +6,7 @@
     <title>King of CollegeBball</title>
     <link rel="stylesheet" href="normalize.css">
     <!--copy to /var/www/html before opening in browser-->
+    <!--and copy python programs and css-->
 </head>
 <body>
 <h1>Working...</h1>
@@ -29,17 +30,31 @@
         $query = $conn->prepare($sql);
         $data = $query->execute();
         $result = $query->fetchAll(PDO::FETCH_ASSOC);
-        foreach($result as $rows){
+        /* foreach($result as $rows){
             echo "<h1 style='font-size: 30px;'>".$rows['Team']."</h1>";
             foreach($rows as $column => $value){
                 echo "<p>".$column." = ".$value."<br></p>";
             }
-        }
+        }*/
         echo "Fetch successful<br>";
     } catch(PDOException $e) {
         echo $sql . "<br>" . $e->getMessage();
     }
 
+    exec("python3 exec_practice.py", $output, $status);
+    print_r($output[0]);
+    //$output[0] is string
+
+    //New process:
+    //  1. python program is run to execute todayScores, createSpreads & createTotals
+    //  as one function that adds results to a "working" database (cleared after use)
+    //  2.addNolan is run based on (1) and formatschedule database and adds results
+    //  to finalNumbers db
+    //  3. Access and show
+    //
+
+
+    echo "<h1>".$status."</h1>";
     //------------------Calculations---------------------------
     //TODO:
     //  1. Create nolan db
