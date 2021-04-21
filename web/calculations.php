@@ -5,13 +5,13 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>King of CollegeBball</title>
     <link rel="stylesheet" href="normalize.css">
-    <script src="passwords.js"></script>
     <!--copy to /var/www/html before opening in browser-->
 </head>
 <body>
 <h1>Working...</h1>
 <?php
     include 'database.php';
+
     //establish connection to db
     try {
         $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
@@ -35,13 +35,37 @@
                 echo "<p>".$column." = ".$value."<br></p>";
             }
         }
-
         echo "Fetch successful<br>";
     } catch(PDOException $e) {
         echo $sql . "<br>" . $e->getMessage();
     }
 
-    //safe exit
+    //------------------Calculations---------------------------
+    //TODO:
+    //  1. Create nolan db
+    //  2. Create odds db (no data if no games)
+    
+    //TODO : dayscores = todaysScores(fCBB_SCH, kpData) in PHP
+    //fCBB_SCH can be in schedule mysql table
+    //kpData can be in kenpom mysql table
+    //takes kenpom data and schedule and makes calculations based on algorithm
+
+    //TODO : withSpreads = createSpread(dayscores)
+
+    //TODO : withTotals = createTotals(withSpreads)
+
+    //TODO : resultsNolan = addNolan(fNolan, withTotals)
+    //fNolan can be in nolan mysql table
+    //withTotals will be from function above
+
+
+    //TODO : odds = getVegas()
+    //odds will have to be fetched from odds mysql table 
+
+
+    //------------------Drop database connection-------------------
+
+    //safe exit from db
     $conn = null;
 ?>
 
