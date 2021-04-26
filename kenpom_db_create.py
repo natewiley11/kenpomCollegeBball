@@ -1,5 +1,5 @@
 #Author : Nathaniel Wiley
-#Last Change : 4-19-21
+#Last Change : 4-26-21
 
 import mysql.connector
 from kenpomScrape import *
@@ -12,12 +12,15 @@ import ssl
 from passwords import *
 
 def establishConnection():
-    kingdb = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password=kingdbPassword(),
-        database="king")
-    return kingdb
+    try:
+        kingdb = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password=kingdbPassword(),
+            database="king")
+        return kingdb
+    except error as e:
+        print('Failed to connect to the database, error = '+e)
 
 def deleteTables(database):
     cursor = database.cursor()
@@ -141,6 +144,28 @@ def insertScheduleData(database):
     database.commit()
     cursor.close()    
 
+def getMatchupData(database, team1, team2):
+    cursor=database.cursor()
+
+    cursor.execute('select * from kenpom where Team = \"'+team1+'\" or Team = \"'+team2+'\"')
+    rows = cursor.fetchall()
+
+    #return array with index 0 being team1 data and index 1 being team2 data
+    return rows
+
+    cursor.close()
+
+def getTeamData(database,team1):
+    cursor=database.cursor()
+
+    cursor.execute('select * from kenpom where Team = \"'+team1+'\"')
+    row = cursor.fetchone()
+
+    #return tuple with data
+    return row
+
+    cursor.close()
+
 def clearKenpomTable(database):
     cursor=database.cursor()
 
@@ -166,9 +191,16 @@ def main():
     
     #deleteTables(db)
     #schema(db)
+
     #insertKenpomData(db)
     #insertScheduleData(db)
-    
+
+    matchupData = getMatchupData(db, 'Gonzaga', 'Baylor')
+    print(matchupData)
+    teamData = getTeamData(db,'Gonzaga')
+    print(teamData)
+
+
     safeExit(db)
 
 if __name__=='__main__':
